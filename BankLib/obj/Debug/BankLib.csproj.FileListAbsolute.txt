@@ -25,3 +25,8 @@ E:\Dropbox\_VisualStudioSpace\HuyPham_20161017_BankInheritanceAssignment\BankLib
 E:\Dropbox\_VisualStudioSpace\HuyPham_20161017_BankInheritanceAssignment\BankLib\obj\Debug\BankLib.pdb
 C:\Users\hqpham\Dropbox\_VisualStudioSpace\HuyPham_20161017_BankInheritanceAssignment\BankLib\obj\Debug\BankLib.dll
 C:\Users\hqpham\Dropbox\_VisualStudioSpace\HuyPham_20161017_BankInheritanceAssignment\BankLib\obj\Debug\BankLib.pdb
+E:\Documents\GitHub\HuyPham_20161017_BankInheritanceAssignment\BankLib\bin\Debug\BankLib.dll
+E:\Documents\GitHub\HuyPham_20161017_BankInheritanceAssignment\BankLib\bin\Debug\BankLib.pdb
+E:\Documents\GitHub\HuyPham_20161017_BankInheritanceAssignment\BankLib\obj\Debug\BankLib.csprojResolveAssemblyReference.cache
+E:\Documents\GitHub\HuyPham_20161017_BankInheritanceAssignment\BankLib\obj\Debug\BankLib.dll
+E:\Documents\GitHub\HuyPham_20161017_BankInheritanceAssignment\BankLib\obj\Debug\BankLib.pdb

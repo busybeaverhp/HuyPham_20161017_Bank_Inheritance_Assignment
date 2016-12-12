@@ -197,11 +197,11 @@ namespace HuyPham_20161017_BankAssignment
                 btnDepositWithdraw.Enabled = false;
 
             // Checks the state of deposit/withdraw validity after execution occurs... if it did occur.
-            if (isExecutionSuccessful == true)
+            if (isExecutionSuccessful)
             {
-                if (radDeposit.Checked == true && IsADepositPossible() == false)
+                if (radDeposit.Checked && IsADepositPossible() == false)
                     btnDepositWithdraw.Enabled = false;
-                else if (radWithdraw.Checked == true && IsAWithdrawPossible() == false)
+                else if (radWithdraw.Checked && IsAWithdrawPossible() == false)
                     btnDepositWithdraw.Enabled = false;
                 else
                     btnDepositWithdraw.Enabled = true;
@@ -232,7 +232,7 @@ namespace HuyPham_20161017_BankAssignment
             string accountInfo;
 
             foreach (Account account in accountList)
-                if (account.AccountNumberID != GetSelectedAccountID())
+                if (account.AccountNumberID != GetSelectedAccountId())
                 {
                     accountInfo = account.AccountNumberID + "    " + account.BankName + " - " + account.LastName + ", " + account.FirstName;
                     cboDestinationAccount.Items.Add(accountInfo);
@@ -251,11 +251,11 @@ namespace HuyPham_20161017_BankAssignment
             if (listViewAccounts.SelectedIndices.Count > 0)
                 if (cboDestinationAccount.SelectedIndex >= 0)
                 {
-                    string selectedAccountID = GetSelectedAccountID();
-                    string selectedTransferDestinationID = GetSelectedTransferDestinationID();
+                    string selectedAccountId = GetSelectedAccountId();
+                    string selectedTransferDestinationId = GetSelectedTransferDestinationId();
 
-                    if (selectedAccountID != selectedTransferDestinationID)
-                        if (IsItAValidNonZeroDecimal(mskTransfer.Text) == true)
+                    if (selectedAccountId != selectedTransferDestinationId)
+                        if (IsItAValidNonZeroDecimal(mskTransfer.Text))
                         {
                             if (ParseStringToDecimal(mskTransfer.Text) <= GetSelectedAccountBalance())
                                 btnTransfer.Enabled = true;
@@ -275,11 +275,11 @@ namespace HuyPham_20161017_BankAssignment
             if (listViewAccounts.SelectedIndices.Count > 0)
                 if (cboDestinationAccount.SelectedIndex >= 0)
                 {
-                    string selectedAccountID = GetSelectedAccountID();
-                    string selectedTransferDestinationID = GetSelectedTransferDestinationID();
+                    string selectedAccountId = GetSelectedAccountId();
+                    string selectedTransferDestinationId = GetSelectedTransferDestinationId();
 
-                    if (selectedAccountID != selectedTransferDestinationID)
-                        if (IsItAValidNonZeroDecimal(mskTransfer.Text) == true)
+                    if (selectedAccountId != selectedTransferDestinationId)
+                        if (IsItAValidNonZeroDecimal(mskTransfer.Text))
                             if (ParseStringToDecimal(mskTransfer.Text) <= GetSelectedAccountBalance())
                                 isATransferPossible = true; 
                 }
@@ -289,18 +289,18 @@ namespace HuyPham_20161017_BankAssignment
 
         private void TransferMoney()
         {
-            string withdrawID = GetSelectedAccountID();
-            string depositID = GetSelectedTransferDestinationID();
+            string withdrawId = GetSelectedAccountId();
+            string depositId = GetSelectedTransferDestinationId();
             
-            decimal amount = ParseStringToDecimal(mskTransfer.Text);
+            decimal amountLocal = ParseStringToDecimal(mskTransfer.Text);
 
             // Let's try LINQ. HQP 20161103.
-            Account accountDebited = accountList.First(x => x.AccountNumberID == withdrawID);
-            accountDebited.TransferTo(depositID, amount);
+            Account accountDebited = accountList.First(x => x.AccountNumberID == withdrawId);
+            accountDebited.TransferTo(depositId, amountLocal);
 
             // Let's try LINQ. HQP 20161103.
-            Account accountCredited = accountList.First(x => x.AccountNumberID == depositID);
-            accountCredited.TransferIn(withdrawID, amount);
+            Account accountCredited = accountList.First(x => x.AccountNumberID == depositId);
+            accountCredited.TransferIn(withdrawId, amountLocal);
         }
 
         #endregion
@@ -309,9 +309,9 @@ namespace HuyPham_20161017_BankAssignment
 
         private void ChangeDepositWithdrawButtonText()
         {
-            if (radDeposit.Checked == true)
+            if (radDeposit.Checked)
                 btnDepositWithdraw.Text = "Deposit";
-            else if (radWithdraw.Checked == true)
+            else if (radWithdraw.Checked)
                 btnDepositWithdraw.Text = "Withdraw";
         }
 
@@ -319,16 +319,16 @@ namespace HuyPham_20161017_BankAssignment
         {
             btnDepositWithdraw.Enabled = false;
 
-            if (radDeposit.Checked == true)
+            if (radDeposit.Checked)
             {
                 if (listViewAccounts.SelectedIndices.Count > 0)
-                    if (IsItAValidNonZeroDecimal(mskDepositWithdraw.Text) == true)
+                    if (IsItAValidNonZeroDecimal(mskDepositWithdraw.Text))
                     {
-                        string selectedAccountID = GetSelectedAccountID();
+                        string selectedAccountId = GetSelectedAccountId();
 
                         foreach (Account account in accountList)
 
-                            if (account.AccountNumberID == selectedAccountID)
+                            if (account.AccountNumberID == selectedAccountId)
                             {
                                 if (account.CurrentBalance < 250000)
                                     btnDepositWithdraw.Enabled = true;
@@ -340,16 +340,16 @@ namespace HuyPham_20161017_BankAssignment
                         btnDepositWithdraw.Enabled = false;
             }
                 
-            else if (radWithdraw.Checked == true)
+            else if (radWithdraw.Checked)
             {
                 if (listViewAccounts.SelectedIndices.Count > 0)
-                    if (IsItAValidNonZeroDecimal(mskDepositWithdraw.Text) == true)
+                    if (IsItAValidNonZeroDecimal(mskDepositWithdraw.Text))
                     {
-                        string selectedAccountID = GetSelectedAccountID();
+                        string selectedAccountId = GetSelectedAccountId();
 
                         foreach (Account account in accountList)
 
-                            if (account.AccountNumberID == selectedAccountID)
+                            if (account.AccountNumberID == selectedAccountId)
                             {
                                 if (account.CurrentBalance > -1000)
                                     btnDepositWithdraw.Enabled = true;
@@ -367,12 +367,12 @@ namespace HuyPham_20161017_BankAssignment
             bool isADepositPossible = false;
 
             if (listViewAccounts.SelectedIndices.Count > 0)
-                if (IsItAValidNonZeroDecimal(mskDepositWithdraw.Text) == true)
+                if (IsItAValidNonZeroDecimal(mskDepositWithdraw.Text))
                 {
-                    string selectedAccountID = GetSelectedAccountID();
+                    string selectedAccountId = GetSelectedAccountId();
 
                     foreach (Account account in accountList)
-                        if (account.AccountNumberID == selectedAccountID)
+                        if (account.AccountNumberID == selectedAccountId)
                             if (account.CurrentBalance < 250000)
                                 isADepositPossible = true;
                 }
@@ -385,12 +385,12 @@ namespace HuyPham_20161017_BankAssignment
             bool isAWithdrawPossible = false;
 
             if (listViewAccounts.SelectedIndices.Count > 0)
-                if (IsItAValidNonZeroDecimal(mskDepositWithdraw.Text) == true)
+                if (IsItAValidNonZeroDecimal(mskDepositWithdraw.Text))
                 {
-                    string selectedAccountID = GetSelectedAccountID();
+                    string selectedAccountId = GetSelectedAccountId();
 
                     foreach (Account account in accountList)
-                        if (account.AccountNumberID == selectedAccountID)       
+                        if (account.AccountNumberID == selectedAccountId)       
                             if (account.CurrentBalance > -10)
                                 isAWithdrawPossible = true;                      
                 }
@@ -400,40 +400,40 @@ namespace HuyPham_20161017_BankAssignment
 
         private void DepositMoney()
         {
-            string depositID = GetSelectedAccountID();
-            decimal amount = ParseStringToDecimal(mskDepositWithdraw.Text);
+            string depositId = GetSelectedAccountId();
+            decimal amountLocal = ParseStringToDecimal(mskDepositWithdraw.Text);
 
             foreach (Account account in accountList)
-                if (account.AccountNumberID == depositID)
+                if (account.AccountNumberID == depositId)
                 {
-                    account.Deposit(amount);
+                    account.Deposit(amountLocal);
                     break;
                 }
         }
 
         private void WithdrawMoney()
         {
-            string withdrawID = GetSelectedAccountID();
-            decimal amount = ParseStringToDecimal(mskDepositWithdraw.Text);
+            string withdrawId = GetSelectedAccountId();
+            decimal amountLocal = ParseStringToDecimal(mskDepositWithdraw.Text);
 
             foreach (Account account in accountList)
-                if (account.AccountNumberID == withdrawID)
+                if (account.AccountNumberID == withdrawId)
                 {
                     if (account is SavingsAccount)
                     {
                         SavingsAccount tempSavingsAccount = (SavingsAccount)account;
-                        tempSavingsAccount.Withdraw(amount);
+                        tempSavingsAccount.Withdraw(amountLocal);
                         break;
                     }
                     else if (account is CheckingAccount)
                     {
                         CheckingAccount tempCheckingAccount = (CheckingAccount)account;
-                        tempCheckingAccount.Withdraw(amount);
+                        tempCheckingAccount.Withdraw(amountLocal);
                         break;
                     }
                     else
                     {
-                        account.Withdraw(amount);
+                        account.Withdraw(amountLocal);
                         break;
                     } 
                 }
@@ -443,46 +443,45 @@ namespace HuyPham_20161017_BankAssignment
 
         #region RETURN METHODS
 
-        private string GetSelectedTransactionID()
+        private string GetSelectedTransactionId()
         {
-            string transactionID = "";
+            string transactionId = "";
 
             if (listViewTransactions.SelectedIndices.Count > 0)
             {
                 ListViewItem selectedItem = listViewTransactions.SelectedItems[0];
-                transactionID = selectedItem.SubItems[0].Text;
-                return transactionID;
+                transactionId = selectedItem.SubItems[0].Text;
+                return transactionId;
             }
             else
-                return transactionID;
+                return transactionId;
         }
 
-        private string GetSelectedAccountID()
+        private string GetSelectedAccountId()
         {
-            string accountID = "";
+            string accountIdLocal = "";
 
             if (listViewAccounts.SelectedIndices.Count > 0)
             {
                 ListViewItem selectedItem = listViewAccounts.SelectedItems[0];
-                accountID = selectedItem.SubItems[0].Text;
-                return accountID;
+                accountIdLocal = selectedItem.SubItems[0].Text;
+                return accountIdLocal;
             }
-            else
-                return accountID;
+            return accountIdLocal;
         }
 
         private decimal GetSelectedAccountBalance()
         {
-            string selectedAccountID = "";
+            string selectedAccountId;
             decimal accountBalance = 0;
 
             if (listViewAccounts.SelectedIndices.Count > 0)
             {
                 ListViewItem selectedItem = listViewAccounts.SelectedItems[0];
-                selectedAccountID = selectedItem.SubItems[0].Text;
+                selectedAccountId = selectedItem.SubItems[0].Text;
 
                 // Let's try LINQ. HQP 20161103.
-                Account account = accountList.First(x => x.AccountNumberID == selectedAccountID);
+                Account account = accountList.First(x => x.AccountNumberID == selectedAccountId);
                 accountBalance = account.CurrentBalance;
 
                 // The old loop way. HQP 20161103.
@@ -495,24 +494,24 @@ namespace HuyPham_20161017_BankAssignment
             return accountBalance;
         }
 
-        private string GetSelectedTransferDestinationID()
+        private string GetSelectedTransferDestinationId()
         {
-            string transferDestinationID = "";
+            string transferDestinationId = "";
 
             if (cboDestinationAccount.SelectedIndex > -1)
-                transferDestinationID = cboDestinationAccount.Text.Substring(0, 9);
+                transferDestinationId = cboDestinationAccount.Text.Substring(0, 9);
 
-            return transferDestinationID;
+            return transferDestinationId;
         }
 
-        private string DisplayNameFromAccountID(string accountNumberID)
+        private string DisplayNameFromAccountId(string accountNumberId)
         {
             string accountInfo = "N/A";
 
             foreach (Account account in accountList)
-                if (account.AccountNumberID == accountNumberID)
+                if (account.AccountNumberID == accountNumberId)
                 {
-                    accountInfo = account.BankName + " - " + account.LastName + ", " + account.FirstName + " (" + accountNumberID + ") ";
+                    accountInfo = account.BankName + " - " + account.LastName + ", " + account.FirstName + " (" + accountNumberId + ") ";
                     break;
                 }
 
@@ -527,10 +526,10 @@ namespace HuyPham_20161017_BankAssignment
 
             bool isItAValidNonZeroDecimal = IsItAValidNonZeroDecimal(modifiedInput);
 
-            if (isItAValidNonZeroDecimal == true)
+            if (isItAValidNonZeroDecimal)
             {
-                decimal amount = Decimal.Parse(modifiedInput);
-                return amount;
+                decimal amountLocal = Decimal.Parse(modifiedInput);
+                return amountLocal;
             }
             else
             {
@@ -545,11 +544,11 @@ namespace HuyPham_20161017_BankAssignment
             input = input.Replace(",", "");
             input = input.Replace("$", "");
 
-            decimal validDecimalValue = 0;
+            decimal validDecimalValue;
             bool isItAValidDecimal = Decimal.TryParse(input, out validDecimalValue);
 
             bool validNonZeroDecimal = false;
-            if (isItAValidDecimal == true && validDecimalValue > 0)
+            if (isItAValidDecimal && validDecimalValue > 0)
                 validNonZeroDecimal = true;
 
             return validNonZeroDecimal;
@@ -586,7 +585,7 @@ namespace HuyPham_20161017_BankAssignment
 
             if (listViewAccounts.SelectedIndices.Count > 0)
             {
-                string selectedAccountId = GetSelectedAccountID();
+                string selectedAccountId = GetSelectedAccountId();
 
                 foreach (Account account in accountList)
                     if (account.AccountNumberID == selectedAccountId)
@@ -621,14 +620,14 @@ namespace HuyPham_20161017_BankAssignment
 
             if (listViewAccounts.SelectedIndices.Count > 0)
             {
-                string selectedAccountId = GetSelectedAccountID();
+                string selectedAccountId = GetSelectedAccountId();
 
                 foreach (Account account in accountList)
                     if (account.AccountNumberID == selectedAccountId)
                     {
                         txtAccountInfo.Text += "Account ID: " + "\t\t" + account.AccountNumberID + "\n";
                         txtAccountInfo.Text += "Account Bank: " + "\t\t" + account.BankName + "\n";
-                        txtAccountInfo.Text += "Account Type: " + "\t\t" + account.GetAccountType.ToString() + "\n\n";
+                        txtAccountInfo.Text += "Account Type: " + "\t\t" + account.GetAccountType + "\n\n";
 
                         txtAccountInfo.Text += "Account Owner Last Name: " + "\t" + account.LastName + "\n";
                         txtAccountInfo.Text += "Account Owner First Name: " + "\t" + account.FirstName + "\n\n";
@@ -644,8 +643,8 @@ namespace HuyPham_20161017_BankAssignment
 
             if (listViewTransactions.SelectedIndices.Count > 0 && listViewAccounts.SelectedIndices.Count > 0)
             {
-                string selectedAccountId = GetSelectedAccountID();
-                string selectedTransactionId = GetSelectedTransactionID();
+                string selectedAccountId = GetSelectedAccountId();
+                string selectedTransactionId = GetSelectedTransactionId();
 
                 foreach (Account account in accountList)
                     if (account.AccountNumberID == selectedAccountId)
@@ -653,7 +652,7 @@ namespace HuyPham_20161017_BankAssignment
                             if (transaction.TransactionID == selectedTransactionId)
                             {
                                 txtTransactionInfo.Text += "Transaction ID: " + "\t\t" + transaction.TransactionID + "\n";
-                                txtTransactionInfo.Text += "Transaction Type: " + "\t\t" + transaction.TypeOfTransaction.ToString() + "\n";
+                                txtTransactionInfo.Text += "Transaction Type: " + "\t\t" + transaction.TypeOfTransaction + "\n";
                                 txtTransactionInfo.Text += "Time of Transaction: " + "\t" + transaction.DateTime + "\n\n";
 
                                 if (transaction.TypeOfTransaction == TransactionType.TransferOut)
@@ -661,8 +660,8 @@ namespace HuyPham_20161017_BankAssignment
                                 else
                                     txtTransactionInfo.Text += transaction.TypeOfTransaction + " amount: " + "\t\t" + transaction.Amount.ToString("c") + "\n\n";
 
-                                txtTransactionInfo.Text += "Transaction Withdrawn From: " + "\t" + DisplayNameFromAccountID(transaction.DebitedAccountNumberID) + " " + "\n";
-                                txtTransactionInfo.Text += "Transaction Deposited To: " + "\t" + DisplayNameFromAccountID(transaction.CreditedAccountNumberID) + "\n\n";
+                                txtTransactionInfo.Text += "Transaction Withdrawn From: " + "\t" + DisplayNameFromAccountId(transaction.DebitedAccountNumberID) + " " + "\n";
+                                txtTransactionInfo.Text += "Transaction Deposited To: " + "\t" + DisplayNameFromAccountId(transaction.CreditedAccountNumberID) + "\n\n";
 
                                 txtTransactionInfo.Text += "Description: " + "\t\t" + transaction.Description;
 
@@ -762,22 +761,22 @@ namespace HuyPham_20161017_BankAssignment
             return scrambledList;
         }
 
-        private void CreateTransferTransactionPair(string transferOutAccountID, string transferInAccountID)
+        private void CreateTransferTransactionPair(string transferOutAccountId, string transferInAccountId)
         {
             List<decimal> balanceList = new List<decimal>();
 
             foreach (Account account in accountList)
-                if (account.AccountNumberID == transferOutAccountID || account.AccountNumberID == transferInAccountID)
+                if (account.AccountNumberID == transferOutAccountId || account.AccountNumberID == transferInAccountId)
                     balanceList.Add(account.CurrentBalance);
 
             decimal amountLocal = rand.Next((int)((balanceList.Min() / 2m) % 2147483647)); System.Threading.Thread.Sleep(16);
 
             foreach (Account account in accountList)
             {
-                if (account.AccountNumberID == transferOutAccountID)
-                    account.TransferTo(transferInAccountID, amountLocal, "Test Random Transfer In/Out");
-                else if (account.AccountNumberID == transferInAccountID)
-                    account.TransferIn(transferOutAccountID, amountLocal, "Test Random Transfer In/Out");
+                if (account.AccountNumberID == transferOutAccountId)
+                    account.TransferTo(transferInAccountId, amountLocal, "Test Random Transfer In/Out");
+                else if (account.AccountNumberID == transferInAccountId)
+                    account.TransferIn(transferOutAccountId, amountLocal, "Test Random Transfer In/Out");
             }
         }
 
